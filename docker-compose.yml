@@ -2,24 +2,11 @@ version: '3'
 
 services:
   database:
-    container_name: mysql_db
-    image: mysql/mysql-server:5.7
-    restart: unless-stopped
-    environment:
-      MYSQL_DATABASE: users_db
-      MYSQL_ROOT_HOST: '%'
-      MYSQL_ROOT_PASSWORD: 1234
-      TZ: 'Asia/Seoul'
+    # Dockerfile이 있는 위치
+    build: ./database
+    # 내부에서 개방할 포트 : 외부에서 접근할 포트
     ports:
       - "3306:3306"
-    volumes:
-      - ./mysql/conf.d:/etc/mysql/conf.d # MySQL 설정 파일 위치
-    command:
-      - "mysqld"
-      - "--character-set-server=utf8mb4"
-      - "--collation-server=utf8mb4_unicode_ci"
-    networks:
-      - test_network
 
   application:
     container_name: docker-compose-test
