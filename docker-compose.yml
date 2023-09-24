@@ -1,4 +1,4 @@
-version: '3'
+version: "3"
 
 services:
   database:
@@ -9,7 +9,7 @@ services:
       - "3306:3306"
 
   application:
-    container_name: docker-compose-test
+    container_name: likelion-java
     restart: on-failure
     build:
       context: ./
@@ -18,8 +18,8 @@ services:
       - "8080:8080"
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql_db:3306/users_db?useSSL=false&allowPublicKeyRetrieval=true
-      SPRING_DATASOURCE_USERNAME: "mysql_user"
-      SPRING_DATASOURCE_PASSWORD: "mysql_password"
+      SPRING_DATASOURCE_USERNAME: "likelion"
+      SPRING_DATASOURCE_PASSWORD: "java"
     depends_on:
       - database
     networks:
