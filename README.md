@@ -1,29 +1,19 @@
 # Spring Boot Mini Project
 
-## Docker
+## How to run
 
-### Build before running
+### Build before running (first time only)
 
-```
+```bash
 ./gradlew clean build
 ```
 
-### Run docker
+### 1. Run mysql server in docker container
 
-type below in terminal in the path containing docker-compose.yml
-
+```bash
+cd database
+docker build -t liondb-img .
+docker run --name liondb-con -p 3306:3306 -d liondb-img
 ```
-docker-compose up
-```
 
-## JPA
-
-### Querydsl
-
-Run the below from build.gradle
-
-```
-compileQuerydsl {
-	options.annotationProcessorPath = configurations.querydsl
-}
-```
+### 2. Run Spring boot project in IDE
