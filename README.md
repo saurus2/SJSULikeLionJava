@@ -1,29 +1,13 @@
-# Spring Boot Mini Project
+# Spring Boot Mini Project - 멋스타그램
 
 ## How to run
 
-### 1. Run mysql server in docker container
+### 1. Run Docker application at first
+
+### 2. Run mysql server in docker container
 
 ```bash
 ./mysql.sh
 ```
 
-### 2. Run Spring boot project in IDE
-
-## Axios
-
-```javascript
-axios({
-  method: "post",
-  url: "/user/signup",
-  data: {
-    username: "test",
-    password: "apple123",
-    name: "Steve Jobs",
-  },
-}).then(function (response) {
-  console.log(response);
-});
-```
-
-Axios docs <https://axios-http.com/kr/docs/api_intro>
+### 3. Run Spring boot project in IDE
