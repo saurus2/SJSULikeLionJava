@@ -112,7 +112,7 @@
 
           error_message.style.display = "block";
 
-          if ((error.response.message = "This username is taken. Try another."))
+          if (error.response.status == 409)
             error_message.innerText = "This username is taken. Try another.";
           else
             error_message.innerText = "Server error. please contact developer.";
