@@ -1,4 +1,4 @@
-package dev.sjsuJava.demo;
+package dev.sjsuJava.demo.Entity;
 import lombok.*;
 import javax.persistence.*;
 
