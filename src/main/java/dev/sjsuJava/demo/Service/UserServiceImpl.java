@@ -1,24 +1,36 @@
 package dev.sjsuJava.demo.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.stereotype.Service;
 
 import dev.sjsuJava.demo.Dto.UserDto;
 import dev.sjsuJava.demo.Entity.User;
 import dev.sjsuJava.demo.Repository.UserRepository;
+import dev.sjsuJava.demo.exception.DuplicateMemberException;
 import lombok.RequiredArgsConstructor;
 
 @Service
-@RequiredArgsConstructor // 의존성 자동 주입
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService{
     private final UserRepository repository;
 
+    /* SIGN UP */
     @Override
-    public Long register(UserDto dto) {
-        // service interface에 구현된 dtoToEntity 활용
+    public UserDto signup(UserDto dto) {
+        if (repository.findByUsername(dto.getUsername()) != null) {
+            throw new DuplicateMemberException("This username is taken. Try another.");
+        }
+
         User entity = dtoToEntity(dto);
+        return UserDto.from(repository.save(entity));
+    }
 
-        repository.save(entity);
-
-        return entity.getUser_id();
+    @Override
+    public List<UserDto> getUsers() {
+        return repository.findAll().stream()
+            .map(user -> UserDto.from(user))
+            .collect(Collectors.toList());
     }
 }
