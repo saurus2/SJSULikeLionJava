@@ -25,9 +25,12 @@ public class UserDto {
 			return null;
 
 		return UserDto.builder()
+				.user_id(user.getUser_id())
 				.username(user.getUsername())
                 .password(user.getPassword())
 				.name(user.getName())
+				.regDate(user.getRegDate())
+				.modDate(user.getModDate())
 				.build();
 	}
 }

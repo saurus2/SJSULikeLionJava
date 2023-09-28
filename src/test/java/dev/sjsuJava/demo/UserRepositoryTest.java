@@ -3,6 +3,7 @@ package dev.sjsuJava.demo;
 import java.util.Optional;
 import java.util.stream.IntStream;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -63,4 +64,15 @@ public class UserRepositoryTest {
         Long id = 7L;
         userRepository.deleteById(id);
     }
+
+    // Authenticate
+    @Test
+    public void testAuthenticate() {
+        Optional<User> user = userRepository.findByUsername("qwe");
+
+        Assertions.assertEquals(user.get().getUsername(), "qwe");
+        Assertions.assertEquals(user.get().getPassword(), "asd");
+    }
+
+
 }

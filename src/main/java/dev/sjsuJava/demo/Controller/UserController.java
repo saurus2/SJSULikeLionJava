@@ -18,21 +18,28 @@ import lombok.RequiredArgsConstructor;
 
 
 @RestController
-@RequiredArgsConstructor // 자동주입
+@RequiredArgsConstructor
 @RequestMapping("/user")
 public class UserController {
 
     private final UserService service;
 
+    /* Get all users info */
     @GetMapping("")
     public ResponseEntity<List<UserDto>> getUsers(HttpServletRequest request){
         return ResponseEntity.ok(service.getUsers());
     }
 
-    /** 유저 정보 등록하기 */
-    @PostMapping("signup")
-    public ResponseEntity<UserDto> insertUser(
+    /** SIGN UP */
+    @PostMapping("/signup")
+    public ResponseEntity<UserDto> signup(
             @Valid @RequestBody UserDto userDto) {
         return ResponseEntity.ok(service.signup(userDto));
+    }
+
+    /* LOG IN */
+    @PostMapping("/login")
+    public ResponseEntity<UserDto> login(@Valid @RequestBody UserDto dto) {
+        return ResponseEntity.ok(service.login(dto));
     }
 }
