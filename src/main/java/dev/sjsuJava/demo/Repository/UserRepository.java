@@ -1,4 +1,4 @@
-package dev.sjsuJava.demo;
+package dev.sjsuJava.demo.Repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

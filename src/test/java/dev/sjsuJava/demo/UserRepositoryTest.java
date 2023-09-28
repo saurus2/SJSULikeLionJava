@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import dev.sjsuJava.demo.Entity.User;
+import dev.sjsuJava.demo.Repository.UserRepository;
 
 @SpringBootTest
 public class UserRepositoryTest {
@@ -21,7 +22,11 @@ public class UserRepositoryTest {
     public void testInsertDummies(){
     // 100개의 새로운 user객체를 생성하고 
         IntStream.rangeClosed(1,10).forEach(i -> {
-           User user =  User.builder().firstname("JY" + i).lastname("Yoon").role("admin").username("guest"+i).password("1234").build();
+           User user =  User.builder()
+                .username("guest"+i)
+                .password("1234")
+                .name("Yoon")
+                .build();
             // 저장한다
            userRepository.save(user);
         });

@@ -1,21 +1,22 @@
-package dev.sjsuJava.demo;
+package dev.sjsuJava.demo.Controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import dev.sjsuJava.demo.Service.RoarServiceImpl;
 import lombok.RequiredArgsConstructor;
 
 
 @Controller
 @RequiredArgsConstructor // 자동주입
-@RequestMapping("/user")
-public class UserController {
+@RequestMapping("/roar")
+public class RoarController {
 
-    // private final UserService service;
+    private final RoarServiceImpl service;
 
     @GetMapping("/")
     public String index(){
-        return "redirect:/user/list";
+        return "redirect:/roar/list";
     }
 }
