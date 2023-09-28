@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
+import dev.sjsuJava.demo.Entity.User;
+
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -17,4 +19,15 @@ public class UserDto {
     private String password;
     private String name;
     private LocalDateTime regDate, modDate;
+
+	public static UserDto from(User user) {
+		if (user == null)
+			return null;
+
+		return UserDto.builder()
+				.username(user.getUsername())
+                .password(user.getPassword())
+				.name(user.getName())
+				.build();
+	}
 }
