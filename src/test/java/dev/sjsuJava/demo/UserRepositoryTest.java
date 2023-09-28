@@ -44,8 +44,8 @@ public class UserRepositoryTest {
     @Test
     public void testUpdate(){
         // 객체 생성
-        Long id = 12L;
-        User user = userRepository.getById(id);
+        Long id = 4L;
+        User user = userRepository.getReferenceById(id);
         user.setPassword("asdasd");
         System.out.println("1-------------");
         userRepository.save(user);
