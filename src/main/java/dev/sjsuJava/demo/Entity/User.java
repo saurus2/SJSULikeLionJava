@@ -22,12 +22,6 @@ public class User extends BaseEntity{
     @Column(length = 1500,nullable = false)
     private String password;
 
-    @Column(length = 1500,nullable = false)
-    private String role;
-
     @Column(length = 50, nullable = false)
-    private String firstname;
-
-    @Column(length = 50, nullable = false)
-    private String lastname;
+    private String name;
 }
