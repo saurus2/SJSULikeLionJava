@@ -9,10 +9,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @SpringBootApplication
 @EnableJpaAuditing
 public class DemoApplication {
-	@RequestMapping("/")
-	String home(){
-		return "home";
-	}
+	// @RequestMapping("/")
+	// String home(){
+	// 	return "home";
+	// }
 	@RequestMapping("/login")
 	String login(){
 		return "login";
@@ -20,6 +20,10 @@ public class DemoApplication {
 	@RequestMapping("/signup")
 	String signup(){
 		return "signup";
+	}
+	@RequestMapping("/upload")
+	String upload(){
+		return "upload";
 	}
 	public static void main(String[] args) {
 		SpringApplication.run(DemoApplication.class, args);
