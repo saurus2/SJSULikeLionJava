@@ -4,9 +4,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-@Controller("/")
+@Controller("")
 public class indexToSignUp {
-    @GetMapping("signup")
+    @GetMapping("/signup")
     public String signup(Model model){
         model.addAttribute("data", "signup");
         return "/signup";
