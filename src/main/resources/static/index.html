@@ -61,6 +61,93 @@
         cursor: pointer;
       }
 
+      /* 모달 뒷 배경 */
+      .upload-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      }
+
+      /* 모달 가운데 정렬 */
+      .upload-modal-content-container {
+        display: grid;
+        height: 100vh;
+        place-content: center;
+      }
+
+      /* 모달 스타일 */
+      .upload-modal-content {
+      background-color: #f2f2f2;
+      color: #252525;
+      margin: auto;
+      padding: 20px;
+      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+      border-radius: 5px;
+      }
+
+      /* 모달 닫기 버튼 */
+      .upload-modal-close {
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+      }
+
+      /* 모달 Upload 버튼 스타일 */
+      #uploadBtn {
+        background-color: rgb(255 119 17);
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        width: fit-content;
+        font-size: 14px;
+        border-radius: 5px;
+        cursor: pointer;
+        float:right;
+      }
+
+      #uploadBtn:hover {
+        background-color: rgb(255 119 17);
+      }
+
+      /* 모달 Select 버튼 스타일 */
+      #selectBtn {
+        background-color: rgb(255 119 17);
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        width: fit-content;
+        font-size: 14px;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+
+      /* 모달 내 미리보기 화면 최대 크기 제한 */
+      #selectedImage {
+        max-width: 100%;
+        max-height: 500px;
+        height: auto;
+      }
+
+      /* 모달 내 미리보기 화면 가운데 정렬 */
+      #selectedImageContainer {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      }
+      
+      /* 모달 Select 버튼과 Upload 버튼 정렬 */
+      .flex-row {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        gap: 15rem;
+      }
+
       .nav-left {
         display: flex;
         align-items: center;
@@ -145,8 +232,32 @@
       </div>
       <div class="nav-center">
         <div class="upload-btn">
-          <span class="material-symbols-outlined"> add_to_photos </span>
+          <span class="material-symbols-outlined" id="openModalBtn"> add_to_photos </span>
         </div>
+
+        
+
+    <!-- 모달 -->
+    <div id="myModal" class="upload-modal">
+      <div class="upload-modal-content-container">
+        <div class="upload-modal-content">
+            <span class="upload-modal-close" id="closeModalBtn">&times;</span>
+            <h2 style="padding-left: 22px;">Post Upload</h2>
+            <div id="selectedImageContainer">
+              <img id="selectedImage" src="#" alt="Selected Image" style="display: none; max-width: 100%;">
+            </div>
+            <br>
+            <div class="flex-row">
+              <label for="fileInput">
+                <div id="selectBtn">Select File</div>
+              </label>
+              <input type="file" id="fileInput" style="padding: 7px; display: none;">
+              <button id="uploadBtn">Upload</button>
+            </div>
+            <div id="uploadStatus"></div>
+        </div>
+      </div>
+    </div>
       </div>
       <div class="nav-right">
         <div class="welcome"></div>
@@ -274,15 +385,83 @@
     logout_btn.addEventListener("click", () => {
       localStorage.removeItem("user_info");
     });
-
-    upload_btn.addEventListener("click", () => {
-      window.location.href = "/upload";
-    });
-
+    
+    //upload_btn.addEventListener("click", () => {
+    //  window.location.href = "/upload";
+    //});
+    
     function main() {
       checkLogin();
     }
 
     main();
+  </script>
+  <script>
+      const openModalBtn = document.getElementById('openModalBtn');
+      const modal = document.getElementById('myModal');
+      const closeModalBtn = document.getElementById('closeModalBtn');
+      const fileInput = document.getElementById('fileInput');
+      const uploadStatus = document.getElementById('uploadStatus');
+      const uploadBtn = document.getElementById('uploadBtn');
+
+      openModalBtn.addEventListener('click', function() {
+      modal.style.display = 'block';
+    });
+
+    // 모달 닫기 버튼 클릭 시 모달 닫기
+    closeModalBtn.addEventListener('click', function() {
+    modal.style.display = 'none';
+    });
+
+    // 파일 업로드 함수
+uploadBtn.addEventListener('click', function() {
+    const file = fileInput.files[0];
+
+    if (file) {
+        const formData = new FormData();
+        formData.append('photo', file);
+
+        // 서버에 파일을 업로드하는 AJAX 요청을 보냅니다.
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', '/upload', true);
+
+        xhr.upload.addEventListener('progress', function(e) {
+            const percentComplete = (e.loaded / e.total) * 100;
+            uploadStatus.innerHTML = `업로드 중: ${percentComplete.toFixed(2)}%`;
+        });
+
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                uploadStatus.innerHTML = '업로드 완료';
+            } else if (xhr.readyState === 4 && xhr.status !== 200) {
+                uploadStatus.innerHTML = '업로드 실패';
+            }
+        };
+
+        xhr.send(formData);
+    }
+});
+
+// 파일 입력 상자의 변경 이벤트 감지
+document.getElementById('fileInput').addEventListener('change', function () {
+    var selectedImage = document.getElementById('selectedImage');
+    var uploadStatus = document.getElementById('uploadStatus');
+
+    // 선택한 파일이 없으면 아무것도 하지 않음
+    if (!this.files.length) {
+        selectedImage.style.display = 'none';
+        return;
+    }
+
+    // 선택한 파일을 이미지 요소에 표시
+    var file = this.files[0];
+    var reader = new FileReader();
+    reader.onload = function (e) {
+        selectedImage.src = e.target.result;
+        selectedImage.style.display = 'block';
+    };
+    reader.readAsDataURL(file);
+});
+
   </script>
 </html>
