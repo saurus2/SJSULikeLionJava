@@ -17,6 +17,11 @@ public class DemoApplication {
 	String signup(){
 		return "signup";
 	}
+
+	static {
+        System.setProperty("com.amazonaws.sdk.disableEc2Metadata", "true");
+	}
+	
 	public static void main(String[] args) {
 		SpringApplication.run(DemoApplication.class, args);
 	}
