@@ -1,5 +1,8 @@
 package dev.sjsuJava.demo.Entity;
 import lombok.*;
+
+import java.util.List;
+
 import javax.persistence.*;
 
 @Entity
@@ -10,7 +13,6 @@ import javax.persistence.*;
 @NoArgsConstructor
 @ToString
 public class User extends BaseEntity{
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // index 자동생성
     @Column(name = "id")
@@ -24,4 +26,7 @@ public class User extends BaseEntity{
 
     @Column(length = 50, nullable = false)
     private String name;
+
+    @OneToMany(cascade={CascadeType.PERSIST, CascadeType.REMOVE})
+    private List<Post> posts;
 }
