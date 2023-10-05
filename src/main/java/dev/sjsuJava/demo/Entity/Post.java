@@ -16,18 +16,16 @@ public class Post extends BaseEntity{
     @Column(name = "id")
     private Long post_id;
 
-    @Column(length = 100,nullable = false, unique = true)
-    private String writer;
-
-    @Column(length = 1500,nullable = false)
-    private String title;
+    @ManyToOne(cascade={CascadeType.PERSIST, CascadeType.REMOVE})
+    @JoinColumn(name="writer_id", referencedColumnName = "id")
+    private User writer;
 
     @Column(length = 50, nullable = false)
-    private String description;
+    private String content;
 
     @Column(length = 50, nullable = false)
     private String pic_id;
 
-    @Column(length = 50, nullable = false)
+    @Column(columnDefinition = "BIGINT(20) NOT NULL DEFAULT 0")
     private Long roars_count;
 }

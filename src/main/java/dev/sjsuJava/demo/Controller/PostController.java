@@ -1,11 +1,26 @@
 package dev.sjsuJava.demo.Controller;
 
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import java.util.List;
 
+import javax.validation.Valid;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
+import dev.sjsuJava.demo.Dto.PostDto;
 import dev.sjsuJava.demo.Service.PostServiceImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 
 @Controller
@@ -15,8 +30,37 @@ public class PostController {
 
     private final PostServiceImpl service;
 
-    @GetMapping("/")
-    public String index(){
-        return "redirect:/post/list";
+    @PostMapping("")
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<PostDto> upload(@Valid @RequestBody PostDto dto) {
+        System.out.println(dto);
+        return ResponseEntity.ok(service.upload(dto));
+    }
+
+    @GetMapping("")
+    public ResponseEntity<List<PostDto>> readAllPost(){
+        return ResponseEntity.ok(service.readAllPost());
+    }
+
+    @GetMapping("{id}")
+    public ResponseEntity<PostDto> readPost(@PathVariable(name="id") int id) {
+        return ResponseEntity.ok(service.readPost(id));
+    }
+
+    @GetMapping("writer")
+    public ResponseEntity<List<PostDto>> readPostByWriterId(@RequestParam(name="id", required=true) int id) {
+        return ResponseEntity.ok(service.readPostByWriterId(id));
+    }
+
+    @PutMapping("{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void updatePost(@PathVariable int id, @RequestBody PostDto dto){
+        service.update(id, dto);
+    }
+
+    @DeleteMapping("{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void deletePost(@PathVariable int id){
+        service.delete(id);
     }
 }
