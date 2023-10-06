@@ -7,7 +7,6 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 import dev.sjsuJava.demo.Dto.UserDto;
-import dev.sjsuJava.demo.Entity.Post;
 import dev.sjsuJava.demo.Entity.User;
 import dev.sjsuJava.demo.Repository.UserRepository;
 import dev.sjsuJava.demo.exception.DuplicateMemberException;
