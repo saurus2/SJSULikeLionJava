@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -15,7 +17,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
-
 import dev.sjsuJava.demo.Dto.PostDto;
 import dev.sjsuJava.demo.Service.PostServiceImpl;
 import lombok.RequiredArgsConstructor;
@@ -27,13 +28,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequiredArgsConstructor // 자동주입
 @RequestMapping("/post")
 public class PostController {
-
+    private static final Logger logger = LoggerFactory.getLogger(PostController.class);
     private final PostServiceImpl service;
 
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<PostDto> upload(@Valid @RequestBody PostDto dto) {
-        System.out.println(dto);
+        logger.info(dto.toString());
         return ResponseEntity.ok(service.upload(dto));
     }
 
