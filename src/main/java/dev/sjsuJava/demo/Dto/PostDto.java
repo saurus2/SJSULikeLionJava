@@ -13,12 +13,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 public class PostDto {
-    private Long post_id;
-    private Long writer_id;
-    private String content;
-    private String pic_id;
-    private Long roars_count;
-    private LocalDateTime regDate, modDate;
+	private Long post_id;
+	private Long writer_id;
+	private String content;
+	private Long picture_id;
+	private Long roars_count;
+	private LocalDateTime regDate, modDate;
 
 	public static PostDto from(Post post) {
 		if (post == null)
@@ -27,9 +27,9 @@ public class PostDto {
 		return PostDto.builder()
 				.post_id(post.getPost_id())
 				.writer_id(post.getWriter().getUser_id())
-                .pic_id(post.getPic_id())
+				.picture_id(post.getPicture().getId())
 				.content(post.getContent())
-                .roars_count(post.getRoars_count())
+				.roars_count(post.getRoars_count())
 				.regDate(post.getRegDate())
 				.modDate(post.getModDate())
 				.build();
