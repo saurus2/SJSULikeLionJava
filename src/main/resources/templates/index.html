@@ -17,8 +17,54 @@
     />
     <title>Home Page</title>
     <style>
+      @font-face {
+        font-family: "GmarketSans";
+        font-weight: 300;
+        font-style: normal;
+        src: url("https://cdn.jsdelivr.net/gh/webfontworld/gmarket/GmarketSansLight.eot");
+        src: url("https://cdn.jsdelivr.net/gh/webfontworld/gmarket/GmarketSansLight.eot?#iefix")
+            format("embedded-opentype"),
+          url("https://cdn.jsdelivr.net/gh/webfontworld/gmarket/GmarketSansLight.woff2")
+            format("woff2"),
+          url("https://cdn.jsdelivr.net/gh/webfontworld/gmarket/GmarketSansLight.woff")
+            format("woff"),
+          url("https://cdn.jsdelivr.net/gh/webfontworld/gmarket/GmarketSansLight.ttf")
+            format("truetype");
+        font-display: swap;
+      }
+      @font-face {
+        font-family: "GmarketSans";
+        font-weight: 500;
+        font-style: normal;
+        src: url("https://cdn.jsdelivr.net/gh/webfontworld/gmarket/GmarketSansMedium.eot");
+        src: url("https://cdn.jsdelivr.net/gh/webfontworld/gmarket/GmarketSansMedium.eot?#iefix")
+            format("embedded-opentype"),
+          url("https://cdn.jsdelivr.net/gh/webfontworld/gmarket/GmarketSansMedium.woff2")
+            format("woff2"),
+          url("https://cdn.jsdelivr.net/gh/webfontworld/gmarket/GmarketSansMedium.woff")
+            format("woff"),
+          url("https://cdn.jsdelivr.net/gh/webfontworld/gmarket/GmarketSansMedium.ttf")
+            format("truetype");
+        font-display: swap;
+      }
+      @font-face {
+        font-family: "GmarketSans";
+        font-weight: 700;
+        font-style: normal;
+        src: url("https://cdn.jsdelivr.net/gh/webfontworld/gmarket/GmarketSansBold.eot");
+        src: url("https://cdn.jsdelivr.net/gh/webfontworld/gmarket/GmarketSansBold.eot?#iefix")
+            format("embedded-opentype"),
+          url("https://cdn.jsdelivr.net/gh/webfontworld/gmarket/GmarketSansBold.woff2")
+            format("woff2"),
+          url("https://cdn.jsdelivr.net/gh/webfontworld/gmarket/GmarketSansBold.woff")
+            format("woff"),
+          url("https://cdn.jsdelivr.net/gh/webfontworld/gmarket/GmarketSansBold.ttf")
+            format("truetype");
+        font-display: swap;
+      }
+
       body {
-        font-family: Arial, sans-serif;
+        font-family: "GmarketSansMedium", "Roboto", "Noto Sans KR", sans-serif;
         background-color: #f2f2f2;
         margin: 0;
         padding: 0;
@@ -52,6 +98,7 @@
         padding: 0 20px;
         position: sticky;
         top: 0;
+        z-index: 100;
       }
 
       .nav-right {
@@ -157,6 +204,11 @@
         border-radius: 5px;
         cursor: pointer;
         float: right;
+        background-color: rgb(255 119 17);
+        color: white;
+      }
+      #uploadBtn:hover {
+        background-color: rgba(255, 120, 17, 0.639);
       }
 
       /* 모달 Select 버튼 스타일 */
@@ -215,67 +267,75 @@
         cursor: pointer;
       }
 
+      .card-container {
+        display: flex;
+        flex-direction: column-reverse;
+      }
+
       /* 메인 */
       .card {
         width: 400px;
-        margin: 50px auto;
+        margin: 15px auto;
         background-color: #fff;
         border: 1px solid #ccc;
         border-radius: 5px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
       }
 
-      .card img {
-        width: 100%;
-      }
-
       .card-header {
-        font-size: 18px;
+        font-size: 15px;
         font-weight: bold;
         padding: 10px;
       }
 
-      .card-description {
-        padding: 10px;
+      .img-container {
+        display: grid;
+        place-items: center;
+        background: black;
+        width: 100%;
+        height: 400px;
       }
 
-      .card-buttons {
+      .img-container img {
+        max-width: 400px;
+        max-height: 400px;
+      }
+
+      .card-footer {
+        display: flex;
+        position: relative;
+      }
+
+      .card-description {
+        padding: 10px;
+        width: 75%;
+        line-break: anywhere;
+      }
+
+      .card-footer-buttons {
         display: flex;
         justify-content: flex-end;
         align-items: center;
         gap: 5px;
-        padding: 10px;
+        margin-top: 7px;
+        position: absolute;
+        top: 0;
+        right: 5px;
       }
 
-      .card-button {
+      .card-footer-button {
         background: transparent;
         border: none;
         cursor: pointer;
+        color: black;
       }
 
-      .card-button:hover {
-        color: rgb(242, 166, 0);
+      .card-footer-button:hover {
+        background: transparent;
+        color: rgb(255 119 17);
       }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script src="https://sdk.amazonaws.com/js/aws-sdk-client-s3.js"></script>
-    <script>
-      var albumBucketName = "BUCKET_NAME";
-      var bucketRegion = "REGION";
-      var IdentityPoolId = "IDENTITY_POOL_ID";
-
-      AWS.config.update({
-        region: bucketRegion,
-        credentials: new AWS.CognitoIdentityCredentials({
-          IdentityPoolId: IdentityPoolId,
-        }),
-      });
-
-      var s3 = new AWS.S3({
-        apiVersion: "2006-03-01",
-        params: { Bucket: albumBucketName },
-      });
-    </script>
   </head>
   <body>
     <div class="navbar">
@@ -328,7 +388,7 @@
                   id="fileInput"
                   style="padding: 7px; display: none"
                 />
-                <button id="uploadBtn">Share</button>
+                <input type="submit" id="uploadBtn" value="Share" />
               </div>
               <div id="uploadStatus"></div>
             </div>
@@ -345,30 +405,7 @@
         </a>
       </div>
     </div>
-    <div class="container">
-      <!-- A card -->
-      <div class="card">
-        <div class="card-header">The Red Wheelbarrow</div>
-        <img
-          class="card-img"
-          src="https://i0.wp.com/digital-photography-school.com/wp-content/uploads/2012/10/image1.jpg?w=600&h=1260&ssl=1"
-          alt="사진 1"
-        />
-        <div class="card-description">
-          The most anthologized poem of the last 25 years for a reason. See
-          also: “This is Just to Say,” which, among other things, has spawned a
-          host of memes and parodies.
-        </div>
-        <div class="card-buttons">
-          <button class="card-button">
-            <span class="material-symbols-outlined"> pets </span>
-          </button>
-          <button class="card-button">
-            <span class="material-symbols-outlined"> comment </span>
-          </button>
-        </div>
-      </div>
-    </div>
+    <div class="card-container"></div>
   </body>
   <!-- 로그인 기능 -->
   <script>
@@ -394,15 +431,9 @@
     logout_btn.addEventListener("click", () => {
       localStorage.removeItem("user_info");
     });
-
-    function main() {
-      checkLogin();
-    }
-
-    main();
   </script>
 
-  <!-- 업로드 관련 -->
+  <!-- 모달 관련 -->
   <script>
     const openModalBtn = document.getElementById("openModalBtn");
     const modal = document.getElementById("myModal");
@@ -411,6 +442,7 @@
     const uploadStatus = document.getElementById("uploadStatus");
     const uploadBtn = document.getElementById("uploadBtn");
     const captionInput = document.querySelector(".caption-input");
+    const cardContainer = document.querySelector(".card-container");
 
     openModalBtn.addEventListener("click", function () {
       // 로그인 정보가 있을 때
@@ -424,44 +456,48 @@
       }
     });
 
-    // 모달 닫기 버튼 클릭 시 모달 닫기
-    closeModalBtn.addEventListener("click", function () {
+    const closeModal = () => {
       modal.style.display = "none";
-    });
+    };
+
+    // 모달 닫기 버튼 클릭 시 모달 닫기
+    closeModalBtn.addEventListener("click", closeModal);
 
     // 파일 업로드 함수
-    uploadBtn.addEventListener("click", function () {
+    uploadBtn.addEventListener("click", function (e) {
       const file = fileInput.files[0];
 
       if (file) {
         const pic_id = Math.random().toString(36).substring(2, 10);
-        const data = {
+
+        // Post 요청
+        const postData = {
           writer_id: JSON.parse(localStorage.user_info).user_id,
-          pic_id,
           content: captionInput.innerText,
           roars_count: 0,
         };
 
-        console.log(data);
+        const pictureData = new FormData();
+        pictureData.append("pic_id", pic_id);
+        pictureData.append("file", file);
 
-        // 서버에 post 요청
-        axios({
-          method: "post",
-          url: "/post/upload",
-          data,
-        })
-          .then((response) => {
-            console.log(response);
-          })
-          .catch((error) => {
+        const createPost = async () => {
+          try {
+            const picResponse = await axios.post("/picture", pictureData);
+            const postResponse = await axios.post("/post", {
+              ...postData,
+              picture_id: picResponse.data.id,
+            });
+            await createCard(postResponse.data);
+          } catch (error) {
             console.log(error);
-          });
-        // S3에 업로드
-        var s3 = new AWS.S3();
-        s3.abortMultipartUpload(params, function (err, data) {
-          if (err) console.log(err, err.stack); // an error occurred
-          else console.log(data); // successful response
-        });
+          }
+        };
+
+        createPost();
+        closeModal();
+      } else {
+        console.log("no file");
       }
     });
 
@@ -487,5 +523,65 @@
         };
         reader.readAsDataURL(file);
       });
+  </script>
+
+  <!-- SHOW Posts -->
+  <script>
+    function newCard(writer, content, filename) {
+      return `
+      <div class="card">
+        <div class="card-header">${writer}</div>
+        <div class="img-container">
+          <img
+            class="card-img"
+            src="http://localhost:8080/picture/download/${filename}"
+            alt="사진 1"
+          />  
+        </div>
+        <div class="card-footer">
+          <div class="card-description">${content}</div>
+          <div class="card-footer-buttons">
+            <button class="card-footer-button">
+              <span class="material-symbols-outlined"> pets </span>
+            </button>
+            <button class="card-footer-button">
+              <span class="material-symbols-outlined" style="transform: translateY(2px);"> comment </span>
+            </button>
+          </div>
+        </div>
+        
+      </div>`;
+    }
+
+    const createCard = async (post) => {
+      const writerResponse = await axios.get(`/user/${post.writer_id}`);
+      const pictureResponse = await axios.get(`/picture/${post.picture_id}`);
+      const writer = await writerResponse.data.username;
+      const file = await pictureResponse.data.storedFileName;
+      cardContainer.innerHTML += await newCard(writer, post.content, file);
+    };
+
+    const createCards = (data) => {
+      cardContainer.innerHTML = "";
+      data.map((post) => {
+        console.log(post);
+        createCard(post);
+      });
+    };
+
+    async function showContents() {
+      const { data } = await axios.get("/post");
+      await createCards(data);
+    }
+  </script>
+
+  <!-- MAIN -->
+  <script>
+    function main() {
+      checkLogin();
+      showContents();
+    }
+
+    main();
   </script>
 </html>
