@@ -15,6 +15,10 @@
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
     />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
+    />
     <title>Home Page</title>
     <style>
       @font-face {
@@ -66,6 +70,7 @@
       body {
         font-family: "GmarketSansMedium", "Roboto", "Noto Sans KR", sans-serif;
         background-color: #f2f2f2;
+        color: #38383d;
         margin: 0;
         padding: 0;
       }
@@ -76,11 +81,11 @@
 
       * {
         transition: 0.1s;
+        color: inherit;
       }
 
       button {
         background-color: rgb(255 119 17);
-        color: white;
         cursor: pointer;
       }
       button:hover {
@@ -91,7 +96,7 @@
       .navbar {
         height: 60px;
         background-color: #959595;
-        color: white;
+        color: whitesmoke;
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -172,7 +177,7 @@
         max-width: 100%;
         padding: 10px;
         min-height: 22px;
-        line-height: 15px;
+        line-height: 22px;
         font-size: 20px;
         outline: none;
         overflow: hidden;
@@ -283,9 +288,23 @@
       }
 
       .card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 2px 10px;
         font-size: 15px;
-        font-weight: bold;
-        padding: 10px;
+      }
+      .card-header-date {
+        font-size: 12px;
+      }
+      .card-header-edit {
+        cursor: pointer;
+      }
+      .card-header-edit span {
+        font-size: 20px;
+      }
+      .card-header-edit span:hover {
+        color: rgb(255 119 17);
       }
 
       .img-container {
@@ -293,7 +312,7 @@
         place-items: center;
         background: black;
         width: 100%;
-        height: 400px;
+        /* height: 400px; */
       }
 
       .img-container img {
@@ -303,36 +322,70 @@
 
       .card-footer {
         display: flex;
+        flex-direction: column;
         position: relative;
+        padding: 5px;
       }
 
       .card-description {
-        padding: 10px;
-        width: 75%;
+        padding: 7px;
         line-break: anywhere;
       }
 
       .card-footer-buttons {
         display: flex;
-        justify-content: flex-end;
         align-items: center;
-        gap: 5px;
         margin-top: 7px;
-        position: absolute;
-        top: 0;
-        right: 5px;
       }
 
       .card-footer-button {
         background: transparent;
         border: none;
         cursor: pointer;
-        color: black;
       }
-
+      .card-footer-button span {
+        font-size: 22px;
+      }
+      .card-footer-button-clicked {
+        color: rgb(255 119 17);
+      }
       .card-footer-button:hover {
         background: transparent;
         color: rgb(255 119 17);
+      }
+
+      /* 코멘트 */
+      .comment-container {
+        display: none;
+        padding: 7px 10px;
+      }
+      .comments {
+        width: 100%;
+      }
+      .comment {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 8px;
+      }
+      .comment-header {
+        display: flex;
+        gap: 10px;
+        font-size: 10px;
+      }
+      .comment-header span {
+        font-size: 9px;
+        color: gray;
+      }
+      .comment-content {
+        font-size: 14px;
+      }
+      .comment-container input {
+        width: -webkit-fill-available;
+        height: 22px;
+        border: none;
+        border-top: 1px solid #f2f2f2;
+        outline: none;
+        padding: 10px 10px 3px 10px;
       }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
@@ -527,10 +580,22 @@
 
   <!-- SHOW Posts -->
   <script>
-    function newCard(writer, content, filename) {
+    function newCard(pid, writer, content, filename, roars_count, reg_date) {
       return `
-      <div class="card">
-        <div class="card-header">${writer}</div>
+      <div class="card" id="${pid}">
+        <div class="card-header">
+            <div class="card-header-writer">${writer}</div>
+            <div class="card-header-date">${new Date(
+              reg_date
+            ).toLocaleDateString("ko-kr", {
+              year: "2-digit",
+              month: "2-digit",
+              day: "2-digit",
+            })}</div>
+            <div class="card-header-edit">
+              <!-- <span class="material-symbols-outlined">edit</span> -->
+            </div>
+        </div>
         <div class="img-container">
           <img
             class="card-img"
@@ -539,17 +604,38 @@
           />  
         </div>
         <div class="card-footer">
-          <div class="card-description">${content}</div>
           <div class="card-footer-buttons">
-            <button class="card-footer-button">
+            <button class="card-footer-button" onclick="roarBtnClick(${pid})">
               <span class="material-symbols-outlined"> pets </span>
             </button>
+            <div style="margin-right: 2px">${roars_count}</div>
             <button class="card-footer-button">
-              <span class="material-symbols-outlined" style="transform: translateY(2px);"> comment </span>
+              <span class="material-symbols-outlined" onclick="commentBtnClick(${pid})"> comment </span>
             </button>
           </div>
+          <div class="card-description">
+            <div class="card-dsscription-content">${content}</div>
+          </div>
         </div>
-        
+        <div class="comment-container">
+          <div class="comments">
+            <div class="comment">
+              <div class="comment-header"/>Jooyul <span>23.10.16</span></div>
+              <div class="comment-content"/>asda sd fasdf asd saf </div>
+            </div>
+            <div class="comment">
+              <div class="comment-header"/>Jooyul <span>23.10.16</span></div>
+              <div class="comment-content"/>asda sd fasdf asd saf </div>
+            </div>
+            <div class="comment">
+              <div class="comment-header"/>Jooyul <span>23.10.16</span></div>
+              <div class="comment-content"/>asda sd fasdf asd saf </div>
+            </div>
+          </div>
+          <form onsubmit="addComment(${pid})">
+            <input placeholder="Add a comment for ${writer}..."/>
+          </form>
+        </div>
       </div>`;
     }
 
@@ -558,7 +644,14 @@
       const pictureResponse = await axios.get(`/picture/${post.picture_id}`);
       const writer = await writerResponse.data.username;
       const file = await pictureResponse.data.storedFileName;
-      cardContainer.innerHTML += await newCard(writer, post.content, file);
+      cardContainer.innerHTML += await newCard(
+        "p" + post.post_id,
+        writer,
+        post.content,
+        file,
+        post.roars_count,
+        post.regDate
+      );
     };
 
     const createCards = (data) => {
@@ -567,6 +660,64 @@
         console.log(post);
         createCard(post);
       });
+    };
+
+    const roarBtnClick = (card) => {
+      const roarBtn = card.children[2].children[0].children[0];
+      const rCountElem = card.children[2].children[0].children[1];
+      let rCount = Number(rCountElem.innerText);
+      let roared = roarBtn.classList.contains("card-footer-button-clicked");
+
+      // down
+      if (!roared) {
+        rCountElem.innerText = rCount + 1;
+        roarBtn.classList.add("card-footer-button-clicked");
+      }
+      // Down
+      else {
+        rCountElem.innerText = rCount - 1;
+        roarBtn.classList.remove("card-footer-button-clicked");
+      }
+    };
+
+    const commentBtnClick = (card) => {
+      const commentBtn = card.children[2].children[0].children[2];
+      const commentElem = card.children[3];
+      let commented = commentBtn.classList.contains(
+        "card-footer-button-clicked"
+      );
+
+      // down
+      if (!commented) {
+        commentElem.style.display = "block";
+        commentBtn.classList.add("card-footer-button-clicked");
+      }
+      // Down
+      else {
+        commentElem.style.display = "none";
+        commentBtn.classList.remove("card-footer-button-clicked");
+      }
+    };
+
+    const addComment = (card) => {
+      event.preventDefault();
+      const comments = card.children[3].firstElementChild;
+      const input = event.target.firstElementChild;
+      const content = input.value;
+      const commenter = JSON.parse(localStorage.getItem("user_info")).username;
+      const date = new Date().toLocaleDateString("ko-kr", {
+        year: "2-digit",
+        month: "2-digit",
+        day: "2-digit",
+      });
+
+      if (content) {
+        comments.innerHTML += `<div class="comment">
+            <div class="comment-header"/>${commenter}<span>${date}</span></div>
+            <div class="comment-content"/>${content}</div>
+          </div>`;
+        input.value = "";
+      }
     };
 
     async function showContents() {
