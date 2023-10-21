@@ -689,21 +689,46 @@
     };
 
     const commentBtnClick = async (card) => {
+      const comments = card.children[3].firstElementChild;
       const commentBtn = card.children[2].children[0].children[2];
       const commentElem = card.children[3];
+      const post_id = Number(card.id.slice(1));
+
       let commented = commentBtn.classList.contains(
         "card-footer-button-clicked"
       );
 
-      // down
       if (!commented) {
         commentElem.style.display = "block";
         commentBtn.classList.add("card-footer-button-clicked");
-      }
-      // Down
-      else {
+
+        const response = await axios.get(`/comment?post_id=${post_id}`);
+        const data = await response.data;
+        console.log(response.status, data);
+
+        data.map(async (comment) => {
+          console.log(comment);
+          const commenterResponse = await axios.get(
+            `/user/${comment.commenter_id}`
+          );
+          const commenterData = await commenterResponse.data;
+          console.log(commenterResponse.status, commenterData);
+
+          comments.innerHTML += `<div class="comment">
+              <div class="comment-header"/>${
+                commenterData.name
+              }<span>${new Date(comment.regDate).toLocaleDateString("ko-kr", {
+            year: "2-digit",
+            month: "2-digit",
+            day: "2-digit",
+          })}</span></div>
+              <div class="comment-content"/>${comment.content}</div>
+            </div>`;
+        });
+      } else {
         commentElem.style.display = "none";
         commentBtn.classList.remove("card-footer-button-clicked");
+        comments.innerHTML = "";
       }
     };
 
@@ -736,7 +761,7 @@
         const data = await response.data;
         console.log(response.status, data);
 
-        if (response.ok) {
+        if (response.status == 200) {
           comments.innerHTML += `<div class="comment">
               <div class="comment-header"/>${commenter}<span>${date}</span></div>
               <div class="comment-content"/>${content}</div>
