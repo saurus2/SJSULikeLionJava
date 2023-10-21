@@ -28,7 +28,7 @@ public class RoarServiceImpl implements RoarService {
 
         // If targetRoar is not in roar DB
         if (targetRoar == null) {
-            //Create new roar object
+            // Create new roar object
             Roar newRoar = Roar.builder()
                     .roar_id(dto.getRoar_id())
                     .commenter(userRepository.getReferenceById(dto.getCommenter_id()))
@@ -40,19 +40,18 @@ public class RoarServiceImpl implements RoarService {
             // 2. Find Post with Post_id and update Roars_count to Roars_count + 1
             Post post = postRepository.getReferenceById(dto.getPost_id());
             post.setRoars_count(post.getRoars_count() + 1);
-            //3. Update the Post entity
-            postRepository.save(post);
+            // 3. Update the Post entity
+            return PostDto.from(postRepository.save(post));
 
-        } else {  // If targetRoar is in roar DB
+        } else { // If targetRoar is in roar DB
             // 1. Delete existing Roar entity (targetRoar) from the database
-            roarRepository.delete(targetRoar);
+            roarRepository.deleteById(targetRoar.getRoar_id());
+
             // 2. Find the Post with Post_id and update Roars_count to Roars_count - 1
             Post post = postRepository.getReferenceById(dto.getPost_id());
             post.setRoars_count(post.getRoars_count() - 1);
             // 3. Update the Post entity
-            postRepository.save(post);
+            return PostDto.from(postRepository.save(post));
         }
-        // Return the updated PostDto
-        return PostDto.from(postRepository.getReferenceById(dto.getPost_id()));
     }
 }

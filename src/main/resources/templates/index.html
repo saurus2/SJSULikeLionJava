@@ -601,7 +601,7 @@
             class="card-img"
             src="http://localhost:8080/picture/download/${filename}"
             alt="사진 1"
-          />  
+          />
         </div>
         <div class="card-footer">
           <div class="card-footer-buttons">
@@ -619,18 +619,6 @@
         </div>
         <div class="comment-container">
           <div class="comments">
-            <div class="comment">
-              <div class="comment-header"/>Jooyul <span>23.10.16</span></div>
-              <div class="comment-content"/>asda sd fasdf asd saf </div>
-            </div>
-            <div class="comment">
-              <div class="comment-header"/>Jooyul <span>23.10.16</span></div>
-              <div class="comment-content"/>asda sd fasdf asd saf </div>
-            </div>
-            <div class="comment">
-              <div class="comment-header"/>Jooyul <span>23.10.16</span></div>
-              <div class="comment-content"/>asda sd fasdf asd saf </div>
-            </div>
           </div>
           <form onsubmit="addComment(${pid})">
             <input placeholder="Add a comment for ${writer}..."/>
@@ -657,30 +645,50 @@
     const createCards = (data) => {
       cardContainer.innerHTML = "";
       data.map((post) => {
-        console.log(post);
+        // console.log(post);
         createCard(post);
       });
     };
 
-    const roarBtnClick = (card) => {
+    const roarBtnClick = async (card) => {
+      if (!localStorage["user_info"]) {
+        alert("you need to login");
+        return;
+      }
+
       const roarBtn = card.children[2].children[0].children[0];
       const rCountElem = card.children[2].children[0].children[1];
       let rCount = Number(rCountElem.innerText);
       let roared = roarBtn.classList.contains("card-footer-button-clicked");
 
-      // down
-      if (!roared) {
-        rCountElem.innerText = rCount + 1;
-        roarBtn.classList.add("card-footer-button-clicked");
-      }
-      // Down
-      else {
-        rCountElem.innerText = rCount - 1;
-        roarBtn.classList.remove("card-footer-button-clicked");
+      // Request to server
+      const body = {
+        commenter_id: JSON.parse(localStorage["user_info"]).user_id,
+        post_id: Number(card.id.slice(1)),
+      };
+
+      console.log(body);
+
+      const response = await axios.post("/roar", body);
+      const data = await response.data;
+      console.log(response.status, data);
+
+      /* Success */
+      if (response.ok) {
+        // UP
+        if (!roared) {
+          rCountElem.innerText = rCount + 1;
+          roarBtn.classList.add("card-footer-button-clicked");
+        }
+        // DOWN
+        else {
+          rCountElem.innerText = rCount - 1;
+          roarBtn.classList.remove("card-footer-button-clicked");
+        }
       }
     };
 
-    const commentBtnClick = (card) => {
+    const commentBtnClick = async (card) => {
       const commentBtn = card.children[2].children[0].children[2];
       const commentElem = card.children[3];
       let commented = commentBtn.classList.contains(
@@ -699,8 +707,13 @@
       }
     };
 
-    const addComment = (card) => {
+    const addComment = async (card) => {
       event.preventDefault();
+      if (!localStorage["user_info"]) {
+        alert("you need to login");
+        return;
+      }
+
       const comments = card.children[3].firstElementChild;
       const input = event.target.firstElementChild;
       const content = input.value;
@@ -712,11 +725,24 @@
       });
 
       if (content) {
-        comments.innerHTML += `<div class="comment">
-            <div class="comment-header"/>${commenter}<span>${date}</span></div>
-            <div class="comment-content"/>${content}</div>
-          </div>`;
-        input.value = "";
+        // Request to server
+        const body = {
+          commenter_id: JSON.parse(localStorage["user_info"]).user_id,
+          post_id: Number(card.id.slice(1)),
+          content,
+        };
+        console.log(body);
+        const response = await axios.post("/comment", body);
+        const data = await response.data;
+        console.log(response.status, data);
+
+        if (response.ok) {
+          comments.innerHTML += `<div class="comment">
+              <div class="comment-header"/>${commenter}<span>${date}</span></div>
+              <div class="comment-content"/>${content}</div>
+            </div>`;
+          input.value = "";
+        }
       }
     };
 
