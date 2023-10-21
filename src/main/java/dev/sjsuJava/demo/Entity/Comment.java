@@ -16,13 +16,14 @@ public class Comment extends BaseEntity{
     @Column(name = "id")
     private Long comment_id;
 
-    @Column(name="post_id")
-    private Long post_id;
+    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.REMOVE })
+    @JoinColumn(name = "post_id", referencedColumnName = "id")
+    private Post post;
 
-    @Column(length = 50,nullable = false)
-    private String commenter;
+    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.REMOVE })
+    @JoinColumn(name = "commenter_id", referencedColumnName = "id")//유저 테이블의 id를 commenter_id로 저장
+    private User commenter;
 
     @Column(length = 1500,nullable = false)
     private String content;
-
 }
