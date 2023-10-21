@@ -4,7 +4,7 @@ FROM --platform=linux/x86_64 mysql:5.7
 # 실전에서는 비밀번호 등을 이곳에 입력하지 말 것!
 # 서버의 환경변수 등을 활용하세요.
 ENV MYSQL_USER likelion
-ENV MYSQL_PASSWORD java
+ENV MYSQL_PASSWORD Java123!
 ENV MYSQL_ROOT_PASSWORD likelionjava
 ENV MYSQL_DATABASE likelionjava
 
