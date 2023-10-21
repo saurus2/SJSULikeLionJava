@@ -20,7 +20,8 @@ public class Roar extends BaseEntity {
     @JoinColumn(name = "commenter_id", referencedColumnName = "id")
     private User commenter;
 
-    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.REMOVE })
+    // removing persistency
+    @ManyToOne(cascade = { CascadeType.PERSIST })
     @JoinColumn(name = "post_id", referencedColumnName = "id")
     private Post post;
 }
