@@ -1,5 +1,6 @@
 package dev.sjsuJava.demo.Service;
 
+import dev.sjsuJava.demo.Entity.Post;
 import org.springframework.stereotype.Service;
 
 import dev.sjsuJava.demo.Dto.PostDto;
@@ -20,27 +21,38 @@ public class RoarServiceImpl implements RoarService {
     @Override
     public PostDto createRoar(RoarDto dto) {
 
+        // Read and bring information for Roar entity which will be a target to compare
         Roar targetRoar = roarRepository.findByCommenterAndPost(
                 userRepository.getReferenceById(dto.getCommenter_id()),
                 postRepository.getReferenceById(dto.getPost_id()));
 
-        Roar entity = Roar.builder()
-                .roar_id(dto.getRoar_id())
-                .commenter(userRepository.getReferenceById(dto.getCommenter_id()))
-                .post(postRepository.getReferenceById(dto.getPost_id()))
-                .build();
-
-        // DB 에 없을 때
+        // If targetRoar is not in roar DB
         if (targetRoar == null) {
-            // 1. DB에 save
-            // 2. Post_id로 Post 찾아서 count 업데이트
-        }
-        // DB 에 있을 때
-        else {
-            // 1. db 에서 지우기
-            // 2. count -= 1
-        }
+            //Create new roar object
+            Roar newRoar = Roar.builder()
+                    .roar_id(dto.getRoar_id())
+                    .commenter(userRepository.getReferenceById(dto.getCommenter_id()))
+                    .post(postRepository.getReferenceById(dto.getPost_id()))
+                    .build();
 
+            // 1. Save the new Roar entity to the database
+            roarRepository.save(newRoar);
+            // 2. Find Post with Post_id and update Roars_count to Roars_count + 1
+            Post post = postRepository.getReferenceById(dto.getPost_id());
+            post.setRoars_count(post.getRoars_count() + 1);
+            //3. Update the Post entity
+            postRepository.save(post);
+
+        } else {  // If targetRoar is in roar DB
+            // 1. Delete existing Roar entity (targetRoar) from the database
+            roarRepository.delete(targetRoar);
+            // 2. Find the Post with Post_id and update Roars_count to Roars_count - 1
+            Post post = postRepository.getReferenceById(dto.getPost_id());
+            post.setRoars_count(post.getRoars_count() - 1);
+            // 3. Update the Post entity
+            postRepository.save(post);
+        }
+        // Return the updated PostDto
         return PostDto.from(postRepository.getReferenceById(dto.getPost_id()));
     }
 }
