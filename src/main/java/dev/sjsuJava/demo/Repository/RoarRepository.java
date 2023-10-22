@@ -1,5 +1,7 @@
 package dev.sjsuJava.demo.Repository;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -12,4 +14,6 @@ import dev.sjsuJava.demo.Entity.User;
 // JPA는 인터페이스 선언만으로도 자동으로 스프링의 빈(Bean)으로 등록된다
 public interface RoarRepository extends JpaRepository<Roar, Long> {
     Roar findByCommenterAndPost(User commenter, Post post);
+
+    List<Roar> findAllByCommenter(User user);
 }

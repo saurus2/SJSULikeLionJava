@@ -1,6 +1,10 @@
 package dev.sjsuJava.demo.Service;
 
 import dev.sjsuJava.demo.Entity.Post;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import dev.sjsuJava.demo.Dto.PostDto;
@@ -53,5 +57,15 @@ public class RoarServiceImpl implements RoarService {
             // 3. Update the Post entity
             return PostDto.from(postRepository.save(post));
         }
+    }
+
+    @Override
+    public List<Long> getRoarsByUser(int user_id) {
+        List<Roar> roars = roarRepository.findAllByCommenter(userRepository.getReferenceById((long) 1));
+        List<Long> roars_id = new ArrayList<>();
+        for (Roar roar : roars) {
+            roars_id.add(roar.getPost().getPost_id());
+        }
+        return roars_id;
     }
 }

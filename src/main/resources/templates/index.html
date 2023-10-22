@@ -88,9 +88,6 @@
         background-color: rgb(255 119 17);
         cursor: pointer;
       }
-      button:hover {
-        background-color: rgba(255, 120, 17, 0.639);
-      }
 
       /* 네비게이션 바 스타일 */
       .navbar {
@@ -349,10 +346,10 @@
       .card-footer-button-clicked {
         color: rgb(255 119 17);
       }
-      .card-footer-button:hover {
+      /* .card-footer-button:hover {
         background: transparent;
         color: rgb(255 119 17);
-      }
+      } */
 
       /* 코멘트 */
       .comment-container {
@@ -580,7 +577,15 @@
 
   <!-- SHOW Posts -->
   <script>
-    function newCard(pid, writer, content, filename, roars_count, reg_date) {
+    function newCard(
+      pid,
+      writer,
+      content,
+      filename,
+      roars_count,
+      reg_date,
+      isRoared
+    ) {
       return `
       <div class="card" id="${pid}">
         <div class="card-header">
@@ -605,7 +610,9 @@
         </div>
         <div class="card-footer">
           <div class="card-footer-buttons">
-            <button class="card-footer-button" onclick="roarBtnClick(${pid})">
+            <button class="card-footer-button ${
+              isRoared && "card-footer-button-clicked"
+            }" onclick="roarBtnClick(${pid})">
               <span class="material-symbols-outlined"> pets </span>
             </button>
             <div style="margin-right: 2px">${roars_count}</div>
@@ -627,26 +634,29 @@
       </div>`;
     }
 
-    const createCard = async (post) => {
-      const writerResponse = await axios.get(`/user/${post.writer_id}`);
-      const pictureResponse = await axios.get(`/picture/${post.picture_id}`);
-      const writer = await writerResponse.data.username;
-      const file = await pictureResponse.data.storedFileName;
+    const createCard = async (post, roared) => {
+      const { data: writerData } = await axios.get(`/user/${post.writer_id}`);
+      const { data: pictureData } = await axios.get(
+        `/picture/${post.picture_id}`
+      );
+      const writer = await writerData.username;
+      const file = await pictureData.storedFileName;
+
       cardContainer.innerHTML += await newCard(
         "p" + post.post_id,
         writer,
         post.content,
         file,
         post.roars_count,
-        post.regDate
+        post.regDate,
+        roared
       );
     };
 
-    const createCards = (data) => {
+    const createCards = (posts, roars) => {
       cardContainer.innerHTML = "";
-      data.map((post) => {
-        // console.log(post);
-        createCard(post);
+      posts.map((post) => {
+        createCard(post, roars.includes(post.post_id));
       });
     };
 
@@ -660,31 +670,24 @@
       const rCountElem = card.children[2].children[0].children[1];
       let rCount = Number(rCountElem.innerText);
       let roared = roarBtn.classList.contains("card-footer-button-clicked");
-
       // Request to server
       const body = {
         commenter_id: JSON.parse(localStorage["user_info"]).user_id,
         post_id: Number(card.id.slice(1)),
       };
 
-      console.log(body);
-
       const response = await axios.post("/roar", body);
       const data = await response.data;
-      console.log(response.status, data);
 
-      /* Success */
-      if (response.ok) {
-        // UP
-        if (!roared) {
-          rCountElem.innerText = rCount + 1;
-          roarBtn.classList.add("card-footer-button-clicked");
-        }
-        // DOWN
-        else {
-          rCountElem.innerText = rCount - 1;
-          roarBtn.classList.remove("card-footer-button-clicked");
-        }
+      // UP
+      if (!roared) {
+        rCountElem.innerText = rCount + 1;
+        roarBtn.classList.add("card-footer-button-clicked");
+      }
+      // DOWN
+      else {
+        rCountElem.innerText = rCount - 1;
+        roarBtn.classList.remove("card-footer-button-clicked");
       }
     };
 
@@ -699,32 +702,33 @@
       );
 
       if (!commented) {
-        commentElem.style.display = "block";
-        commentBtn.classList.add("card-footer-button-clicked");
+        let htmlToAdd = "";
 
         const response = await axios.get(`/comment?post_id=${post_id}`);
         const data = await response.data;
-        console.log(response.status, data);
 
-        data.map(async (comment) => {
-          console.log(comment);
-          const commenterResponse = await axios.get(
-            `/user/${comment.commenter_id}`
-          );
-          const commenterData = await commenterResponse.data;
-          console.log(commenterResponse.status, commenterData);
+        await Promise.all(
+          data.map(async (comment) => {
+            const commenterResponse = await axios.get(
+              `/user/${comment.commenter_id}`
+            );
+            const commenterData = await commenterResponse.data;
 
-          comments.innerHTML += `<div class="comment">
+            htmlToAdd += `<div class="comment">
               <div class="comment-header"/>${
                 commenterData.name
               }<span>${new Date(comment.regDate).toLocaleDateString("ko-kr", {
-            year: "2-digit",
-            month: "2-digit",
-            day: "2-digit",
-          })}</span></div>
+              year: "2-digit",
+              month: "2-digit",
+              day: "2-digit",
+            })}</span></div>
               <div class="comment-content"/>${comment.content}</div>
             </div>`;
-        });
+          })
+        );
+        comments.innerHTML = htmlToAdd;
+        commentElem.style.display = "block";
+        commentBtn.classList.add("card-footer-button-clicked");
       } else {
         commentElem.style.display = "none";
         commentBtn.classList.remove("card-footer-button-clicked");
@@ -756,10 +760,8 @@
           post_id: Number(card.id.slice(1)),
           content,
         };
-        console.log(body);
         const response = await axios.post("/comment", body);
         const data = await response.data;
-        console.log(response.status, data);
 
         if (response.status == 200) {
           comments.innerHTML += `<div class="comment">
@@ -772,8 +774,12 @@
     };
 
     async function showContents() {
-      const { data } = await axios.get("/post");
-      await createCards(data);
+      const { data: posts } = await axios.get("/post");
+      const { data: roars } = await axios.get(
+        `/roar?user_id=${JSON.parse(localStorage["user_info"]).user_id}`
+      );
+
+      await createCards(posts, roars);
     }
   </script>
 
