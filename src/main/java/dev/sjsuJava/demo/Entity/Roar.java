@@ -3,6 +3,9 @@ package dev.sjsuJava.demo.Entity;
 import lombok.*;
 import javax.persistence.*;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 @Entity
 @Getter
 @Setter
@@ -16,12 +19,14 @@ public class Roar extends BaseEntity {
     @Column(name = "id")
     private Long roar_id;
 
-    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.REMOVE })
+    @ManyToOne(cascade = { CascadeType.PERSIST })
     @JoinColumn(name = "commenter_id", referencedColumnName = "id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private User commenter;
 
     // removing persistency
     @ManyToOne(cascade = { CascadeType.PERSIST })
     @JoinColumn(name = "post_id", referencedColumnName = "id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Post post;
 }
