@@ -61,7 +61,7 @@ public class RoarServiceImpl implements RoarService {
 
     @Override
     public List<Long> getRoarsByUser(int user_id) {
-        List<Roar> roars = roarRepository.findAllByCommenter(userRepository.getReferenceById((long) 1));
+        List<Roar> roars = roarRepository.findAllByCommenter(userRepository.getReferenceById((long) user_id));
         List<Long> roars_id = new ArrayList<>();
         for (Roar roar : roars) {
             roars_id.add(roar.getPost().getPost_id());

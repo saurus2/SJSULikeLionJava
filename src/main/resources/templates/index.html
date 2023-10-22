@@ -758,7 +758,7 @@
       const comments = card.children[3].firstElementChild;
       const input = event.target.firstElementChild;
       const content = input.value;
-      const commenter = JSON.parse(localStorage.getItem("user_info")).username;
+      const commenter = JSON.parse(localStorage.getItem("user_info")).name;
       const date = new Date().toLocaleDateString("ko-kr", {
         year: "2-digit",
         month: "2-digit",
