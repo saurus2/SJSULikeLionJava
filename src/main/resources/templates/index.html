@@ -380,6 +380,31 @@
         outline: none;
         padding: 10px 10px 3px 10px;
       }
+
+      /* Delete Confirmation Modal */
+      .delete-modal {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: #fff;
+        border: 1px solid #ccc;
+        padding: 20px;
+        z-index: 2;
+      }
+
+      .delete-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 1;
+        cursor: default;
+      }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   </head>
@@ -599,12 +624,21 @@
                 writer == JSON.parse(localStorage["user_info"]).name
                   ? ` <span
                     class="material-symbols-outlined"
-                    onclick="deletePost(${pid})"
+                    onclick="showDeleteModal()"
                   >
                     delete
                   </span>`
                   : ""
               }
+                <!-- Modal -->
+                <div id="deleteModal" class="delete-modal">
+                    <div class="delete-modal-content">
+                        <p>Are you sure you want to delete this item?</p>
+                        <button id="confirmDelete" onclick="deletePost(${pid})">Yes</button>
+                        <button id="cancelDelete" onclick="closeDeleteModal()">No</button>
+                    </div>
+                </div>
+                <div id="delete-overlay" class="delete-overlay" onclick="closeDeleteModal()"></div>
             </div>
         </div>
         <div class="img-container">
@@ -670,6 +704,16 @@
       const post_id = Number(card.id.slice(1));
       const { data } = axios.delete(`/post/${post_id}`);
       card.remove();
+    };
+
+    showDeleteModal = () => {
+      document.getElementById("deleteModal").style.display = "block";
+      document.getElementById("delete-overlay").style.display = "block";
+    };
+
+    closeDeleteModal = () => {
+      document.getElementById("deleteModal").style.display = "none";
+      document.getElementById("delete-overlay").style.display = "none";
     };
 
     const roarBtnClick = async (card) => {
