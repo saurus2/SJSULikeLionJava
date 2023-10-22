@@ -23,7 +23,6 @@ public class PostServiceImpl implements PostService {
     private final PostRepository repository;
     private final UserRepository userRepository;
     private final PictureRepository pictureRepository;
-    private final PictureService pictureService;
 
     @Override
     public PostDto upload(PostDto dto) {
