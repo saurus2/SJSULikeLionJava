@@ -819,6 +819,7 @@
       );
 
       if (!isShowComment) {
+        let cList = [];
         let htmlToAdd = "";
 
         const { data: commentsInPost } = await axios.get(
@@ -827,20 +828,25 @@
 
         await Promise.all(
           commentsInPost.map(
-            async ({ comment_id, commenter_id, regDate, content }) => {
+            async ({ comment_id, commenter_id, modDate, content }) => {
               const { data: commenterData } = await axios.get(
                 `/user/${commenter_id}`
               );
 
-              htmlToAdd += commentElement(
-                comment_id,
-                commenterData,
-                new Date(regDate),
-                content
-              );
+              cList.push({
+                html: commentElement(
+                  comment_id,
+                  commenterData,
+                  new Date(modDate),
+                  content
+                ),
+                cid: comment_id,
+              });
             }
           )
         );
+        cList.sort((a, b) => a.cid - b.cid);
+        cList.map((c) => (htmlToAdd += c.html));
 
         comments.innerHTML = htmlToAdd;
         commentElem.style.display = "block";
