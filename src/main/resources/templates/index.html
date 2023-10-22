@@ -15,7 +15,14 @@
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
     />
-    <title>Home Page</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Sometype+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap"
+      rel="stylesheet"
+    />
+
+    <title>LikeLion</title>
     <style>
       @font-face {
         font-family: "GmarketSans";
@@ -63,10 +70,24 @@
         font-display: swap;
       }
 
+      :root {
+        --primary-text: #38383d;
+        --white: #fefefe;
+        --less-white: #f7f7f7;
+        --primary-color: #ff7711;
+        --primary-color-light: #ff7811a6;
+        --primary-dark: #d35b00;
+        --gray: #959595;
+        --black-opaque: #0000004d;
+        --border-light: #f2f2f2;
+        --red: #ff2b2b;
+      }
+
       body {
         font-family: "GmarketSansMedium", "Roboto", "Noto Sans KR", sans-serif;
-        background-color: #f2f2f2;
-        color: #38383d;
+        font-family: "Sometype Mono", monospace;
+        background-color: var(--less-white);
+        color: var(--primary-text);
         margin: 0;
         padding: 0;
       }
@@ -75,21 +96,26 @@
         text-align: center;
       }
 
+      button,
+      input {
+        font-family: "Sometype Mono", monospace;
+      }
+
       * {
         transition: 0.1s;
         color: inherit;
       }
 
       button {
-        background-color: rgb(255 119 17);
+        background-color: var(--primary-color);
         cursor: pointer;
       }
 
       /* 네비게이션 바 스타일 */
       .navbar {
         height: 60px;
-        background-color: #959595;
-        color: whitesmoke;
+        background-color: var(--gray);
+        color: var(--white);
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -97,6 +123,10 @@
         position: sticky;
         top: 0;
         z-index: 100;
+      }
+
+      .nav-left h1 {
+        font-family: "Sometype Mono", monospace;
       }
 
       .nav-right {
@@ -111,8 +141,8 @@
       }
 
       .upload-btn:hover {
-        color: rgb(255 119 17);
-        background: rgba(0, 0, 0, 0.5);
+        color: var(--primary-color);
+        background: var(--black-opaque);
       }
 
       /* 모달 뒷 배경 */
@@ -123,7 +153,7 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background-color: rgba(0, 0, 0, 0.5);
+        background-color: var(--black-opaque);
       }
 
       /* 모달 가운데 정렬 */
@@ -141,8 +171,8 @@
         width: 30vw;
         min-width: 350px;
         max-width: 450px;
-        background-color: #f2f2f2;
-        color: #252525;
+        background-color: var(--white);
+        color: var(--primary-text);
         margin: auto;
         box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
         border-radius: 5px;
@@ -181,7 +211,7 @@
       span[contenteditable]:empty:focus::before,
       span[contenteditable]:empty::before {
         content: "Write a caption...";
-        color: gray;
+        color: var(--gray);
       }
 
       /* 모달 닫기 버튼 */
@@ -202,17 +232,17 @@
         border-radius: 5px;
         cursor: pointer;
         float: right;
-        background-color: rgb(255 119 17);
-        color: white;
+        background-color: var(--primary-color);
+        color: var(--white);
       }
       #uploadBtn:hover {
-        background-color: rgba(255, 120, 17, 0.639);
+        background-color: var(--primary-color-light);
       }
 
       /* 모달 Select 버튼 스타일 */
       #selectBtn {
-        background-color: rgb(255 119 17);
-        color: #fff;
+        background-color: var(--primary-color);
+        color: var(--white);
         border: none;
         padding: 10px 20px;
         font-size: 14px;
@@ -220,7 +250,7 @@
         cursor: pointer;
       }
       #selectBtn:hover {
-        background-color: rgba(255, 120, 17, 0.639);
+        background-color: var(--primary-color-light);
       }
 
       /* 모달 내 미리보기 화면 최대 크기 제한 */
@@ -260,9 +290,11 @@
       .log-button {
         margin-left: 20px;
         border: none;
-        padding: 10px 20px;
+        padding: 6px 10px;
         border-radius: 5px;
         cursor: pointer;
+        color: white;
+        font-weight: bold;
       }
 
       .card-container {
@@ -272,32 +304,48 @@
 
       /* 메인 */
       .card {
-        width: 400px;
+        width: 60vw;
+        max-width: 600px;
         margin: 15px auto;
-        background-color: #fff;
-        border: 1px solid #ccc;
+        background-color: var(--white);
         border-radius: 5px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+      }
+
+      @media (max-width: 768px) {
+        .card {
+          width: 95vw;
+        }
       }
 
       .card-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 2px 10px;
+        padding: 5px 10px;
         font-size: 15px;
+      }
+      .card-header-left {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+      .card-header-writer {
+        font-weight: bold;
       }
       .card-header-date {
         font-size: 12px;
+        color: #9fa2a6;
       }
-      .card-header-edit {
+      .card-header-remove {
         cursor: pointer;
       }
-      .card-header-edit span {
-        font-size: 20px;
+      .card-header-remove span {
+        font-size: 18px;
+        transform: translateY(2px);
       }
-      .card-header-edit span:hover {
-        color: rgb(255 119 17);
+      .card-header-remove span:hover {
+        color: var(--primary-dark);
       }
 
       .img-container {
@@ -309,8 +357,7 @@
       }
 
       .img-container img {
-        max-width: 400px;
-        max-height: 400px;
+        width: 100%;
       }
 
       .card-footer {
@@ -323,6 +370,8 @@
       .card-description {
         padding: 7px;
         line-break: anywhere;
+        border-top: 1px solid #f2f2f2;
+        border-bottom: 1px solid #f2f2f2;
       }
 
       .card-footer-buttons {
@@ -340,12 +389,8 @@
         font-size: 22px;
       }
       .card-footer-button-clicked {
-        color: rgb(255 119 17);
+        color: var(--primary-color);
       }
-      /* .card-footer-button:hover {
-        background: transparent;
-        color: rgb(255 119 17);
-      } */
 
       /* 코멘트 */
       .comment-container {
@@ -362,23 +407,37 @@
       }
       .comment-header {
         display: flex;
+        align-items: center;
+        font-size: 11px;
         gap: 10px;
-        font-size: 10px;
+        color: var(--primary-dark);
+      }
+      .comment-header-date {
+        font-size: 9px;
+        color: var(--gray);
       }
       .comment-header span {
-        font-size: 9px;
-        color: gray;
+        color: var(--gray);
+        cursor: pointer;
+        font-size: 12px;
+        transform: translateY(-1px);
       }
+      .comment-header span:hover {
+        color: var(--red);
+      }
+
       .comment-content {
         font-size: 14px;
+        margin-top: 1px;
       }
       .comment-container input {
         width: -webkit-fill-available;
         height: 22px;
+        padding: 10px 10px 3px 10px;
+        background: var(--white);
         border: none;
         border-top: 1px solid #f2f2f2;
         outline: none;
-        padding: 10px 10px 3px 10px;
       }
 
       /* Delete Confirmation Modal */
@@ -388,7 +447,7 @@
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        background-color: #fff;
+        background-color: var(--white);
         border: 1px solid #ccc;
         padding: 20px;
         z-index: 2;
@@ -401,7 +460,7 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background-color: rgba(0, 0, 0, 0.5);
+        background-color: var(--black-opaque);
         z-index: 1;
         cursor: default;
       }
@@ -416,7 +475,7 @@
           src="https://upload.wikimedia.org/wikipedia/commons/4/48/LIKELION_brandsymbol.png"
           alt="logo"
         />
-        <h1>멋스타그램</h1>
+        <h1>LikeLion</h1>
       </div>
       <div class="nav-center">
         <div class="upload-btn">
@@ -489,9 +548,9 @@
       // Logged in
       if (localStorage.getItem("user_info")) {
         logout_btn.style.display = "block";
-        welcome.innerHTML = `Welcome, ${
+        welcome.innerHTML = `Welcome, <strong>${
           JSON.parse(localStorage["user_info"]).name
-        }.`;
+        }.</strong>`;
       }
       // logged out
       else {
@@ -610,23 +669,26 @@
       return `
       <div class="card" id="${pid}">
         <div class="card-header">
-            <div class="card-header-writer">${writer}</div>
-            <div class="card-header-date">${new Date(
-              reg_date
-            ).toLocaleDateString("ko-kr", {
-              year: "2-digit",
-              month: "2-digit",
-              day: "2-digit",
-            })}</div>
-            <div class="card-header-edit">
+            <div class="card-header-left">
+              <div class="card-header-writer">${writer.name}</div>
+              <div class="card-header-date">${new Date(
+                reg_date
+              ).toLocaleDateString("ko-kr", {
+                year: "2-digit",
+                month: "2-digit",
+                day: "2-digit",
+              })}</div>
+            </div>
+            <div class="card-header-remove">
               ${
                 localStorage["user_info"] &&
-                writer == JSON.parse(localStorage["user_info"]).name
+                writer.username ==
+                  JSON.parse(localStorage["user_info"]).username
                   ? ` <span
                     class="material-symbols-outlined"
                     onclick="showDeleteModal()"
                   >
-                    delete
+                    close
                   </span>`
                   : ""
               }
@@ -657,7 +719,7 @@
             </button>
             <div style="margin-right: 2px">${roars_count}</div>
             <button class="card-footer-button">
-              <span class="material-symbols-outlined" onclick="commentBtnClick(${pid})"> comment </span>
+              <span class="material-symbols-outlined" onclick="showComments(${pid})"> comment </span>
             </button>
           </div>
           <div class="card-description">
@@ -668,7 +730,7 @@
           <div class="comments">
           </div>
           <form onsubmit="addComment(${pid})">
-            <input placeholder="Add a comment for ${writer}..."/>
+            <input placeholder="Add a comment for ${writer.name}..."/>
           </form>
         </div>
       </div>`;
@@ -679,12 +741,11 @@
       const { data: pictureData } = await axios.get(
         `/picture/${post.picture_id}`
       );
-      const writer = await writerData.name;
       const file = await pictureData.storedFileName;
 
       cardContainer.innerHTML += await newCard(
         "p" + post.post_id,
-        writer,
+        writerData,
         post.content,
         file,
         post.roars_count,
@@ -747,48 +808,47 @@
       }
     };
 
-    const commentBtnClick = async (card) => {
+    const showComments = async (card) => {
       const comments = card.children[3].firstElementChild;
       const commentBtn = card.children[2].children[0].children[2];
       const commentElem = card.children[3];
-      const post_id = Number(card.id.slice(1));
 
-      let commented = commentBtn.classList.contains(
+      const post_id = Number(card.id.slice(1));
+      let isShowComment = commentBtn.classList.contains(
         "card-footer-button-clicked"
       );
 
-      if (!commented) {
+      if (!isShowComment) {
         let htmlToAdd = "";
 
-        const response = await axios.get(`/comment?post_id=${post_id}`);
-        const data = await response.data;
+        const { data: commentsInPost } = await axios.get(
+          `/comment?post_id=${post_id}`
+        );
 
         await Promise.all(
-          data.map(async (comment) => {
-            const commenterResponse = await axios.get(
-              `/user/${comment.commenter_id}`
-            );
-            const commenterData = await commenterResponse.data;
+          commentsInPost.map(
+            async ({ comment_id, commenter_id, regDate, content }) => {
+              const { data: commenterData } = await axios.get(
+                `/user/${commenter_id}`
+              );
 
-            htmlToAdd += `<div class="comment">
-              <div class="comment-header"/>${
-                commenterData.name
-              }<span>${new Date(comment.regDate).toLocaleDateString("ko-kr", {
-              year: "2-digit",
-              month: "2-digit",
-              day: "2-digit",
-            })}</span></div>
-              <div class="comment-content"/>${comment.content}</div>
-            </div>`;
-          })
+              htmlToAdd += commentElement(
+                comment_id,
+                commenterData,
+                new Date(regDate),
+                content
+              );
+            }
+          )
         );
+
         comments.innerHTML = htmlToAdd;
         commentElem.style.display = "block";
         commentBtn.classList.add("card-footer-button-clicked");
       } else {
+        comments.innerHTML = "";
         commentElem.style.display = "none";
         commentBtn.classList.remove("card-footer-button-clicked");
-        comments.innerHTML = "";
       }
     };
 
@@ -802,7 +862,7 @@
       const comments = card.children[3].firstElementChild;
       const input = event.target.firstElementChild;
       const content = input.value;
-      const commenter = JSON.parse(localStorage.getItem("user_info")).name;
+      const commenter = JSON.parse(localStorage.getItem("user_info"));
       const date = new Date().toLocaleDateString("ko-kr", {
         year: "2-digit",
         month: "2-digit",
@@ -810,23 +870,55 @@
       });
 
       if (content) {
-        // Request to server
-        const body = {
-          commenter_id: JSON.parse(localStorage["user_info"]).user_id,
+        const { data } = await axios.post("/comment", {
+          commenter_id: commenter.user_id,
           post_id: Number(card.id.slice(1)),
           content,
-        };
-        const response = await axios.post("/comment", body);
-        const data = await response.data;
+        });
 
-        if (response.status == 200) {
-          comments.innerHTML += `<div class="comment">
-              <div class="comment-header"/>${commenter}<span>${date}</span></div>
-              <div class="comment-content"/>${content}</div>
-            </div>`;
-          input.value = "";
-        }
+        comments.innerHTML += commentElement(
+          data.comment_id,
+          commenter,
+          new Date(),
+          content
+        );
+        input.value = "";
       }
+    };
+
+    const commentElement = (cid, commenter, date, content) => {
+      const dateFormatted = date.toLocaleDateString("ko-kr", {
+        year: "2-digit",
+        month: "2-digit",
+        day: "2-digit",
+      });
+      const timeFormatted = date.toLocaleTimeString("en-US", {
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false,
+      });
+
+      return `<div class="comment" id="c${cid}">
+                <div class="comment-header"/>
+                  <div>${commenter.name}</div>
+                  <div class="comment-header-date">${
+                    dateFormatted + " " + timeFormatted
+                  }</div>
+                  ${
+                    localStorage["user_info"] &&
+                    commenter.username ==
+                      JSON.parse(localStorage["user_info"]).username
+                      ? `<span class="material-symbols-outlined" onclick="deleteComment(${cid})">delete</span>`
+                      : ""
+                  }
+                </div>
+                <div class="comment-content"/>${content}</div>
+              </div>`;
+    };
+
+    const deleteComment = async (cid) => {
+      document.querySelector(`#c${cid}`).remove();
+      const response = axios.delete(`/comment/${cid}`);
     };
 
     async function showContents() {
