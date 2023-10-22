@@ -3,6 +3,9 @@ package dev.sjsuJava.demo.Entity;
 import lombok.*;
 import javax.persistence.*;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 @Entity
 @Getter
 @Setter
@@ -17,15 +20,16 @@ public class Post extends BaseEntity {
     @Column(name = "id")
     private Long post_id;
 
-    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.REMOVE })
+    @ManyToOne(cascade = { CascadeType.PERSIST })
     @JoinColumn(name = "writer_id", referencedColumnName = "id")
     private User writer;
 
     @Column(length = 200, nullable = false)
     private String content;
 
-    @OneToOne
+    @OneToOne(cascade = { CascadeType.PERSIST, CascadeType.REMOVE })
     @JoinColumn(name = "pic_id", referencedColumnName = "id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Picture picture;
 
     @Column(columnDefinition = "BIGINT(20) NOT NULL DEFAULT 0")

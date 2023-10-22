@@ -1,5 +1,6 @@
 package dev.sjsuJava.demo.Service;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -22,6 +23,7 @@ public class PostServiceImpl implements PostService {
     private final PostRepository repository;
     private final UserRepository userRepository;
     private final PictureRepository pictureRepository;
+    private final PictureService pictureService;
 
     @Override
     public PostDto upload(PostDto dto) {
@@ -112,8 +114,13 @@ public class PostServiceImpl implements PostService {
     public void delete(int id) {
         Optional<Post> post = repository.findById((long) id);
         if (post.isEmpty()) {
-            throw new NotFoundException();
+            throw new NotFoundException("No post found");
         }
+
+        // Delete picture
+        Picture pic = post.get().getPicture();
+        File file = new File("src/main/resources/static/pictures/" + pic.getStoredFileName() + pic.getExtension());
+        file.delete();
 
         repository.delete(post.get());
     }

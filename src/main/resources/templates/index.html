@@ -9,15 +9,11 @@
     />
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
-    />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
-    />
-    <link
-      rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
     />
     <title>Home Page</title>
     <style>
@@ -598,7 +594,17 @@
               day: "2-digit",
             })}</div>
             <div class="card-header-edit">
-              <!-- <span class="material-symbols-outlined">edit</span> -->
+              ${
+                localStorage["user_info"] &&
+                writer == JSON.parse(localStorage["user_info"]).name
+                  ? ` <span
+                    class="material-symbols-outlined"
+                    onclick="deletePost(${pid})"
+                  >
+                    delete
+                  </span>`
+                  : ""
+              }
             </div>
         </div>
         <div class="img-container">
@@ -639,7 +645,7 @@
       const { data: pictureData } = await axios.get(
         `/picture/${post.picture_id}`
       );
-      const writer = await writerData.username;
+      const writer = await writerData.name;
       const file = await pictureData.storedFileName;
 
       cardContainer.innerHTML += await newCard(
@@ -658,6 +664,12 @@
       posts.map((post) => {
         createCard(post, roars.includes(post.post_id));
       });
+    };
+
+    const deletePost = (card) => {
+      const post_id = Number(card.id.slice(1));
+      const { data } = axios.delete(`/post/${post_id}`);
+      card.remove();
     };
 
     const roarBtnClick = async (card) => {
@@ -776,7 +788,11 @@
     async function showContents() {
       const { data: posts } = await axios.get("/post");
       const { data: roars } = await axios.get(
-        `/roar?user_id=${JSON.parse(localStorage["user_info"]).user_id}`
+        `/roar?user_id=${
+          localStorage["user_info"]
+            ? JSON.parse(localStorage["user_info"]).user_id
+            : -1
+        }`
       );
 
       await createCards(posts, roars);
