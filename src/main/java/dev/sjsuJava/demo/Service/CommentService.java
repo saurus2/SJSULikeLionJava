@@ -7,9 +7,11 @@ import dev.sjsuJava.demo.Dto.CommentDto;
 public interface CommentService {
 
     CommentDto upload(CommentDto dto);
-    //List<CommentDto> readAllComment();
-    //CommentDto readComment(int id);
+
+    // List<CommentDto> readAllComment();
+    // CommentDto readComment(int id);
     List<CommentDto> readCommentByPostId(int post_id);
+
     // void update(int id, CommentDto dto);
-    // void delete(int id);
+    void delete(int id);
 }

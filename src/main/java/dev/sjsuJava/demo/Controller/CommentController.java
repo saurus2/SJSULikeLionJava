@@ -22,8 +22,6 @@ import dev.sjsuJava.demo.Service.CommentServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestParam;
 
-
-
 @Controller
 @RequiredArgsConstructor // 자동주입
 @RequestMapping("/comment")
@@ -39,19 +37,20 @@ public class CommentController {
     }
 
     @GetMapping("")
-    public ResponseEntity<List<CommentDto>> readCommentByPostId(@RequestParam(name="post_id", required=true) int id) {
+    public ResponseEntity<List<CommentDto>> readCommentByPostId(
+            @RequestParam(name = "post_id", required = true) int id) {
         return ResponseEntity.ok(service.readCommentByPostId(id));
     }
 
     // @PutMapping("{id}")
     // @ResponseStatus(HttpStatus.OK)
     // public void updateComment(@PathVariable int id, @RequestBody CommentDto dto){
-    //     service.update(id, dto);
+    // service.update(id, dto);
     // }
 
-    // @DeleteMapping("{id}")
-    // @ResponseStatus(HttpStatus.OK)
-    // public void deleteComment(@PathVariable int id){
-    //     service.delete(id);
-    // }
+    @DeleteMapping("{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteComment(@PathVariable int id) {
+        service.delete(id);
+    }
 }

@@ -23,12 +23,6 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public CommentDto upload(CommentDto dto) {
-        // {
-        //     post_id: 1,
-        //     commenter_id: 3,
-        //     content: "asdasd"
-        // }
-
         // db 에 저장
         Comment comment = Comment.builder()
                 .comment_id(dto.getComment_id())
@@ -41,9 +35,8 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public List<CommentDto> readCommentByPostId(int post_id) {
-        
         List<CommentDto> commentDtolist = new ArrayList<>();
-        List<Comment> commentList = repository.findByPost(postRepository.getReferenceById((long)post_id));
+        List<Comment> commentList = repository.findByPost(postRepository.getReferenceById((long) post_id));
 
         for (Comment comment : commentList) {
             commentDtolist.add(CommentDto.from(comment));
@@ -51,5 +44,16 @@ public class CommentServiceImpl implements CommentService {
 
         return commentDtolist;
     }
-    
+
+    @Override
+    public void delete(int id) {
+        Optional<Comment> comment = repository.findById((long) id);
+
+        if (comment.isEmpty()) {
+            throw new NotFoundException();
+        }
+
+        repository.delete(comment.get());
+    }
+
 }
