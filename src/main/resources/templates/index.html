@@ -98,7 +98,7 @@
 
       button,
       input {
-        font-family: "Sometype Mono", monospace;
+        font-family: "Sometype Mono", "Gmarket Sans", monospace;
       }
 
       * {
@@ -125,8 +125,14 @@
         z-index: 100;
       }
 
+      .nav-left {
+        display: flex;
+        align-items: center;
+      }
+
       .nav-left h1 {
         font-family: "Sometype Mono", monospace;
+        font-size: 10px;
       }
 
       .nav-right {
@@ -274,12 +280,6 @@
         justify-content: space-between;
         margin: 0 20px 10px 20px;
       }
-
-      .nav-left {
-        display: flex;
-        align-items: center;
-      }
-
       .logo {
         width: 50px;
         height: 30px;
@@ -315,6 +315,9 @@
       @media (max-width: 768px) {
         .card {
           width: 95vw;
+        }
+        .nav-left h1 {
+          display: none;
         }
       }
 
@@ -706,7 +709,7 @@
         <div class="img-container">
           <img
             class="card-img"
-            src="http://52.33.71.159:8080/picture/download/${filename}"
+            src="http://likelion.run-us-west2.goorm.app/picture/download/${filename}"
             alt="사진 1"
           />
         </div>
