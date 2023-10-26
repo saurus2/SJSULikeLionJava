@@ -1,13 +1,5 @@
-# Spring Boot Mini Project - 멋스타그램
+# LikeLion-Java Mini Project - 멋스타그램
 
-## How to run
+## [DEMO](https://likelion.run-us-west2.goorm.app/)
 
-### 1. Run Docker application at first
-
-### 2. Run mysql server in docker container
-
-```bash
-./mysql.sh
-```
-
-### 3. Run Spring boot project in IDE
+## [README](https://denim-vicuna-d98.notion.site/d9c4fa746a0347f1a9d632b5ca9eec47?v=eebb54fddfd34e44bdfae6c80401076b&pvs=4)

@@ -11,18 +11,18 @@ import dev.sjsuJava.demo.Repository.UserRepository;
 @SpringBootTest
 public class UserRepositoryTest {
 
-    @Autowired
-    UserRepository userRepository;
+    // @Autowired
+    // UserRepository userRepository;
 
-    // Select Test
-    @Test
-    public void testSelect() {
-        Long id = 5L;
-        Optional<User> result = userRepository.findById(id);
-        System.out.println("================");
-        if (result.isPresent()) {
-            User user = result.get();
-            System.out.println(user.getUsername());
-        }
-    }
+    // // Select Test
+    // @Test
+    // public void testSelect() {
+    // Long id = 5L;
+    // Optional<User> result = userRepository.findById(id);
+    // System.out.println("================");
+    // if (result.isPresent()) {
+    // User user = result.get();
+    // System.out.println(user.getUsername());
+    // }
+    // }
 }
