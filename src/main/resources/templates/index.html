@@ -707,9 +707,9 @@
     let posts = [];
     let roars = [];
     let page = 0;
-    const POST_PER_PAGE = 3;
+    const POST_PER_PAGE = 5;
 
-    function newCard(pid, content, roars_count, reg_date, isRoared) {
+    function buildCard(pid, content, roars_count, reg_date, isRoared) {
       return `
       <div class="card" id="${pid}">
         <div class="card-header">
@@ -754,55 +754,20 @@
           </div>
         </div>
         <div class="comment-container">
-          <div class="comments">
-          </div>
+          <div class="comments"></div>
           <form onsubmit="addComment(${pid})">
           </form>
         </div>
       </div>`;
     }
 
-    const createCardTop = async (post) => {
-      const { data: writerData } = await axios.get(`/user/${post.writer_id}`);
-      const { data: pictureData } = await axios.get(
-        `/picture/${post.picture_id}`
-      );
-      const file = await pictureData.storedFileName;
-
-      cardContainer.innerHTML =
-        (await newCard(
-          "p" + post.post_id,
-          writerData,
-          post.content,
-          file,
-          post.roars_count,
-          post.regDate,
-          false
-        )) + cardContainer.innerHTML;
-    };
-
-    const createCard = async (post, roared) => {
-      cardContainer.innerHTML += newCard(
-        "p" + post.post_id,
-        // writerData,
-        post.content,
-        // file,
-        post.roars_count,
-        post.regDate,
-        roared
-      );
-      const { data: writerData } = await axios.get(`/user/${post.writer_id}`);
-      const { data: pictureData } = await axios.get(
-        `/picture/${post.picture_id}`
-      );
-      const file = await pictureData.storedFileName;
-      const card = document.querySelector(`#p${post.post_id}`);
-      card.firstElementChild.firstElementChild.firstElementChild.innerText =
-        writerData.name;
-      card.firstElementChild.lastElementChild.innerHTML = `
+    const updateCard = (element, cid, writer, filename) => {
+      element.firstElementChild.firstElementChild.firstElementChild.innerText =
+        writer.name;
+      element.firstElementChild.lastElementChild.innerHTML = `
               ${
                 localStorage["user_info"] &&
-                writerData.username ==
+                writer.username ==
                   JSON.parse(localStorage["user_info"]).username
                   ? ` <span
                     class="material-symbols-outlined"
@@ -816,19 +781,52 @@
                 <div id="deleteModal" class="delete-modal">
                     <div class="delete-modal-content">
                         <p>Are you sure you want to delete this item?</p>
-                        <button id="confirmDelete" onclick="deletePost(${
-                          post.post_id
-                        })">Yes</button>
+                        <button id="confirmDelete" onclick="deletePost(${cid})">Yes</button>
                         <button id="cancelDelete" onclick="closeDeleteModal()">No</button>
                     </div>
                 </div>
                 <div id="delete-overlay" class="delete-overlay" onclick="closeDeleteModal()"></div>`;
-      card.children[1].innerHTML = `
+      element.children[1].innerHTML = `
           <img
             class="card-img"
-            src="http://likelion.run-us-west2.goorm.app/picture/download/${file}"
+            src="http://likelion.run-us-west2.goorm.app/picture/download/${filename}"
             alt="사진 1"
           />`;
+      element.lastElementChild.lastElementChild.innerHTML = `<input placeholder="Add a comment for ${writer.name}..."/>`;
+    };
+
+    const createCardTop = async (post) => {
+      const cid = "p" + post.post_id;
+      cardContainer.innerHTML =
+        buildCard(cid, post.content, post.roars_count, post.regDate, false) +
+        cardContainer.innerHTML;
+      const { data: writerData } = await axios.get(`/user/${post.writer_id}`);
+      const { data: pictureData } = await axios.get(
+        `/picture/${post.picture_id}`
+      );
+      const filename = await pictureData.storedFileName;
+      const card = document.getElementById(cid);
+      updateCard(card, cid, writerData, filename);
+    };
+
+    const createCard = async (post, roared) => {
+      const cid = "p" + post.post_id;
+      cardContainer.innerHTML += buildCard(
+        cid,
+        // writerData,
+        post.content,
+        // file,
+        post.roars_count,
+        post.regDate,
+        roared
+      );
+      const { data: writerData } = await axios.get(`/user/${post.writer_id}`);
+      const { data: pictureData } = await axios.get(
+        `/picture/${post.picture_id}`
+      );
+      const filename = await pictureData.storedFileName;
+      const card = document.getElementById(cid);
+      updateCard(card, cid, writerData, filename);
     };
 
     const moreClicked = () => {
@@ -843,16 +841,15 @@
         posts
           .slice(page * POST_PER_PAGE, (page + 1) * POST_PER_PAGE)
           .map((post) => {
-            console.log(post);
             createCard(post, roars.includes(post.post_id));
           })
       );
     };
 
     const deletePost = (card) => {
-      console.log(card.id);
+      console.log(card);
       const post_id = Number(card.id.slice(1));
-      // const { data } = axios.delete(`/post/${post_id}`);
+      const { data } = axios.delete(`/post/${post_id}`);
       card.remove();
     };
 
@@ -1026,7 +1023,7 @@
         }`
       );
       posts = postsData;
-      roars: roarsData;
+      roars = roarsData;
       posts.sort((a, b) => new Date(b.regDate) - new Date(a.regDate));
       await createCards(page);
     }
