@@ -1,4 +1,4 @@
-# LikeLion-Java Mini Project - 멋스타그램
+# LikeLion-Java Mini Project - LIONSTAGRAM(멋스타그램)
 
 ## [DEMO](https://likelion.run-us-west2.goorm.app/)
 
