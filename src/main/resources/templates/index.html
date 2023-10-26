@@ -826,10 +826,10 @@
     };
 
     const moreClicked = () => {
-      if (posts.length / POST_PER_PAGE < page) {
+      createCards(++page);
+      if (posts.length / POST_PER_PAGE <= page + 1) {
         document.querySelector(".more").style.display = "none";
       }
-      createCards(++page);
     };
 
     const createCards = async (page) => {
