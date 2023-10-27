@@ -75,7 +75,7 @@
         --primary-text: #38383d;
         --white: #fefefe;
         --less-white: #f7f7f7;
-        --primary-color: #ff7711;
+        --primary-color: #f2a01e;
         --primary-color-light: #ff7811a6;
         --primary-dark: #d35b00;
         --gray: #959595;
@@ -85,7 +85,6 @@
       }
 
       body {
-        font-family: "GmarketSansMedium", "Roboto", "Noto Sans KR", sans-serif;
         font-family: "Sometype Mono", monospace;
         background-color: var(--less-white);
         color: var(--primary-text);
@@ -99,7 +98,7 @@
 
       button,
       input {
-        font-family: "Sometype Mono", "Gmarket Sans", monospace;
+        font-family: "Sometype Mono", monospace;
       }
 
       * {
@@ -108,15 +107,15 @@
       }
 
       button {
-        background-color: var(--primary-color);
+        background-color: var(--gray);
         cursor: pointer;
       }
 
       /* 네비게이션 바 스타일 */
       .navbar {
         height: 60px;
-        background-color: var(--gray);
-        color: var(--white);
+        background-color: var(--primary-color);
+        color: black;
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -132,7 +131,10 @@
       }
 
       .nav-left h1 {
-        font-family: "Sometype Mono", monospace;
+        font-family: "GmarketSans", "Sometype Mono", monospace;
+        color: black;
+        letter-spacing: 1px;
+        font-size: 25px;
       }
 
       .nav-right {
@@ -147,7 +149,7 @@
       }
 
       .upload-btn:hover {
-        color: var(--primary-color);
+        color: var(--less-white);
         background: var(--black-opaque);
       }
 
@@ -281,8 +283,8 @@
         margin: 0 20px 10px 20px;
       }
       .logo {
-        width: 60px;
-        height: 50px;
+        width: 70px;
+        height: 35px;
         margin-right: 10px;
       }
 
@@ -501,6 +503,12 @@
           width: 95vw;
         }
         .nav-left h1 {
+          font-size: 10px;
+        }
+        .logo {
+          display: none;
+        }
+        .welcome {
           display: none;
         }
         .more {
@@ -514,7 +522,7 @@
     <div class="navbar">
       <div class="nav-left">
         <img class="logo" src="/logo.png" alt="logo" />
-        <h1>LionStagram</h1>
+        <h1>LIONSTAGRAM</h1>
       </div>
       <div class="nav-center">
         <div class="upload-btn">
@@ -606,9 +614,9 @@
       // Logged in
       if (localStorage.getItem("user_info")) {
         logout_btn.style.display = "block";
-        welcome.innerHTML = `Welcome, <strong>${
+        welcome.innerHTML = `Welcome, ${
           JSON.parse(localStorage["user_info"]).name
-        }.</strong>`;
+        }`;
       }
       // logged out
       else {
